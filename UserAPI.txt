@@ -1,0 +1,48 @@
+package UserAPI;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+@Path("/Book")
+public class userDetails 
+{
+	public static String Name;
+	public String conn()
+	{
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo", "root", "root");
+
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select * from user");
+			while (rs.next())
+			{
+				Name = rs.getString(1);
+			}
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return Name;
+		
+	}
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String getUser() throws ClassNotFoundException, SQLException 
+	{
+
+		String Response = "<h1>"+conn()+"</h>";
+		return Response;
+		
+	}
+
+		
+	
+}
